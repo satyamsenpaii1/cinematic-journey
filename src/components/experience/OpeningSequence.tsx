@@ -45,7 +45,7 @@ export function OpeningSequence() {
     return () => clearTimeout(id);
   }, [phase, W]);
 
-  const traveling = phase === "warp" || phase === "beat" || phase === "realization";
+  const traveling = phase === "warp" || phase === "beat";
   const dimming = phase === "beat" || phase === "realization" || phase === "handoff";
 
   return (
