@@ -72,32 +72,38 @@ export function OpeningSequence() {
       />
 
       {/* the words */}
-      <div className="absolute inset-0 flex flex-col items-center justify-center px-8 text-center">
-        <CinematicLine
-          show={phase === "dedication"}
-          className="font-display text-4xl font-light tracking-[0.04em] text-starlight sm:text-5xl md:text-6xl"
-        >
-          For Shanaya.
-        </CinematicLine>
+      <div className="absolute inset-0">
+        <div className="absolute inset-0 flex flex-col items-center justify-center px-8 text-center">
+          <CinematicLine
+            show={phase === "dedication"}
+            className="font-display text-4xl font-light tracking-[0.04em] text-starlight sm:text-5xl md:text-6xl"
+          >
+            For Shanaya.
+          </CinematicLine>
+        </div>
 
-        <CinematicLine
-          show={phase === "invitation"}
-          className="max-w-xs font-display text-2xl font-light leading-relaxed text-starlight-dim sm:max-w-md sm:text-3xl"
-        >
-          There&rsquo;s something I wanted you to&nbsp;see.
-        </CinematicLine>
+        <div className="absolute inset-0 flex flex-col items-center justify-center px-8 text-center">
+          <CinematicLine
+            show={phase === "invitation"}
+            className="max-w-xs font-display text-2xl font-light leading-relaxed text-starlight-dim sm:max-w-md sm:text-3xl"
+          >
+            There&rsquo;s something I wanted you to&nbsp;see.
+          </CinematicLine>
+        </div>
 
         {/*
           The story begins — this line stays, resting in the dark the
           warp carried us into. The next chapter grows from here.
         */}
-        <CinematicLine
-          show={inStory}
-          enterDuration={3}
-          className="max-w-xs font-display text-3xl font-light leading-snug text-starlight sm:max-w-lg sm:text-4xl md:text-5xl"
-        >
-          How did we get&nbsp;here?
-        </CinematicLine>
+        <div className="absolute inset-0 flex flex-col items-center justify-center px-8 text-center">
+          <CinematicLine
+            show={inStory}
+            enterDuration={3}
+            className="max-w-xs font-display text-3xl font-light leading-snug text-starlight sm:max-w-lg sm:text-4xl md:text-5xl"
+          >
+            How did we get&nbsp;here?
+          </CinematicLine>
+        </div>
       </div>
 
       {/* the threshold — a single point of light asking to be touched */}
