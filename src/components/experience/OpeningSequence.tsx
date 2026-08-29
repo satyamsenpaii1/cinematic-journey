@@ -8,10 +8,11 @@ import { usePrefersReducedMotion } from "@/hooks/use-prefers-reduced-motion";
  * The opening film.
  *
  * silence → dedication → invitation → threshold (waits for touch)
- *   → warp → "Wait…" → "Did Satyam actually make this?" → handoff
+ *   → warp → story
  *
- * `handoff` is the clean transition point where the next chapter
- * ("How did we get here?") will take over. For now it rests in the dark.
+ * `story` is the first meaningful reveal — "How did we get here?" —
+ * reached by moving forward through the same night, never by leaving it.
+ * The line rests on screen as the threshold of the next chapter.
  */
 type Phase =
   | "silence"
@@ -19,9 +20,7 @@ type Phase =
   | "invitation"
   | "threshold"
   | "warp"
-  | "beat"
-  | "realization"
-  | "handoff";
+  | "story";
 
 export function OpeningSequence() {
   const [phase, setPhase] = useState<Phase>("silence");
@@ -34,10 +33,8 @@ export function OpeningSequence() {
       silence: ["dedication", 2600 * W],
       dedication: ["invitation", 6200 * W],
       invitation: ["threshold", 5600 * W],
-      warp: ["beat", 3600 * W],
-      beat: ["realization", 2700 * W],
-      realization: ["handoff", 6400 * W],
-      // threshold waits for the visitor; handoff waits for the next chapter
+      warp: ["story", 3400 * W],
+      // threshold waits for the visitor; story rests until the next chapter
     };
     const next = timers[phase];
     if (!next) return;
@@ -45,8 +42,8 @@ export function OpeningSequence() {
     return () => clearTimeout(id);
   }, [phase, W]);
 
-  const traveling = phase === "warp" || phase === "beat";
-  const dimming = phase === "beat" || phase === "realization" || phase === "handoff";
+  const traveling = phase === "warp";
+  const inStory = phase === "story";
 
   return (
     <main
@@ -60,7 +57,7 @@ export function OpeningSequence() {
         transition={{ duration: reduced ? 0.8 : 3.4, ease: "easeOut" }}
         className="absolute inset-0"
       >
-        <StarField traveling={traveling && !reduced} dim={dimming ? 0.55 : 0} />
+        <StarField traveling={traveling && !reduced} dim={inStory ? 0.3 : 0} />
       </motion.div>
 
       {/* soft vignette — the dark itself is part of the set */}
@@ -90,26 +87,17 @@ export function OpeningSequence() {
           There&rsquo;s something I wanted you to&nbsp;see.
         </CinematicLine>
 
+        {/*
+          The story begins — this line stays, resting in the dark the
+          warp carried us into. The next chapter grows from here.
+        */}
         <CinematicLine
-          show={phase === "beat"}
-          enterDuration={1.6}
-          className="font-display text-3xl font-light italic text-starlight sm:text-4xl"
-        >
-          Wait&hellip;
-        </CinematicLine>
-
-        <CinematicLine
-          show={phase === "realization"}
+          show={inStory}
+          enterDuration={3}
           className="max-w-xs font-display text-3xl font-light leading-snug text-starlight sm:max-w-lg sm:text-4xl md:text-5xl"
         >
-          Did <span className="italic text-ember">Satyam</span> actually make
-          this?
+          How did we get&nbsp;here?
         </CinematicLine>
-
-        {/*
-          Handoff point — the next chapter ("How did we get here?")
-          begins from this darkness.
-        */}
       </div>
 
       {/* the threshold — a single point of light asking to be touched */}
@@ -155,7 +143,7 @@ export function OpeningSequence() {
         )}
       </AnimatePresence>
 
-      {/* the warp flash — darkness opening, not a screen flash */}
+      {/* the warp — darkness opening, not a screen flash */}
       <AnimatePresence>
         {phase === "warp" && (
           <motion.div
