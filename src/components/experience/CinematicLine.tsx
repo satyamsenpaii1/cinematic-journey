@@ -23,12 +23,15 @@ export function CinematicLine({
       {show && (
         <motion.p
           initial={{ opacity: 0, filter: "blur(6px)" }}
-          animate={{ opacity: 1, filter: "blur(0px)" }}
-          exit={{ opacity: 0, filter: "blur(4px)" }}
-          transition={{
-            duration: enterDuration,
-            ease: [0.22, 0.61, 0.36, 1],
-            exit: { duration: exitDuration, ease: "easeInOut" },
+          animate={{
+            opacity: 1,
+            filter: "blur(0px)",
+            transition: { duration: enterDuration, ease: [0.22, 0.61, 0.36, 1] },
+          }}
+          exit={{
+            opacity: 0,
+            filter: "blur(4px)",
+            transition: { duration: exitDuration, ease: "easeInOut" },
           }}
           className={className}
         >
