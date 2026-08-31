@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { StarField } from "./StarField";
 import { CinematicLine } from "./CinematicLine";
+import { ContinueCue } from "./ContinueCue";
 import { usePrefersReducedMotion } from "@/hooks/use-prefers-reduced-motion";
 
 /**
@@ -12,7 +13,8 @@ import { usePrefersReducedMotion } from "@/hooks/use-prefers-reduced-motion";
  *
  * `story` is the first meaningful reveal — "How did we get here?" —
  * reached by moving forward through the same night, never by leaving it.
- * The line rests on screen as the threshold of the next chapter.
+ * The line rests on screen as the threshold of the next chapter, then
+ * offers a quiet way forward into the rest of the experience.
  */
 type Phase =
   | "silence"
@@ -22,8 +24,12 @@ type Phase =
   | "warp"
   | "story";
 
-export function OpeningSequence() {
+export function OpeningSequence({
+  onComplete,
+}: { onComplete?: () => void } = {}) {
   const [phase, setPhase] = useState<Phase>("silence");
+  const [showContinue, setShowContinue] = useState(false);
+  const [leaving, setLeaving] = useState(false);
   const reduced = usePrefersReducedMotion();
 
   const W = reduced ? 0.45 : 1; // reduced motion compresses the timing, nothing moves
@@ -42,11 +48,31 @@ export function OpeningSequence() {
     return () => clearTimeout(id);
   }, [phase, W]);
 
+  // once the story line has had room to breathe, offer a quiet way forward
+  useEffect(() => {
+    if (phase !== "story") return;
+    const id = setTimeout(() => setShowContinue(true), 3200 * W);
+    return () => clearTimeout(id);
+  }, [phase, W]);
+
+  const handleContinue = () => {
+    if (leaving) return;
+    setLeaving(true);
+  };
+
+  useEffect(() => {
+    if (!leaving) return;
+    const id = setTimeout(() => onComplete?.(), 1100);
+    return () => clearTimeout(id);
+  }, [leaving, onComplete]);
+
   const traveling = phase === "warp";
   const inStory = phase === "story";
 
   return (
-    <main
+    <motion.main
+      animate={{ opacity: leaving ? 0 : 1 }}
+      transition={{ duration: 1.1, ease: "easeInOut" }}
       className="fixed inset-0 overflow-hidden bg-night-deep"
       aria-label="A quiet night sky. An opening made for Shanaya."
     >
@@ -98,13 +124,15 @@ export function OpeningSequence() {
         <div className="absolute inset-0 flex flex-col items-center justify-center px-8 text-center">
           <CinematicLine
             show={inStory}
-            enterDuration={3}
+            enterDuration={1.8}
             className="max-w-xs font-display text-3xl font-light leading-snug text-starlight sm:max-w-lg sm:text-4xl md:text-5xl"
           >
             How did we get&nbsp;here?
           </CinematicLine>
         </div>
       </div>
+
+      <ContinueCue visible={showContinue && !leaving} onClick={handleContinue} />
 
       {/* the threshold — a single point of light asking to be touched */}
       <AnimatePresence>
@@ -169,6 +197,6 @@ export function OpeningSequence() {
           />
         )}
       </AnimatePresence>
-    </main>
+    </motion.main>
   );
 }
