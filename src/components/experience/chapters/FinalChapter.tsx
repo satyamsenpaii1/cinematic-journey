@@ -116,4 +116,10 @@ export function FinalChapter() {
         <div className="absolute inset-0 flex items-center justify-center">
           <span
             aria-hidden="true"
-            className="h-1.5 w-1.5 rounded-full
+            className="h-1.5 w-1.5 rounded-full bg-ember/70 shadow-[0_0_16px_5px_oklch(0.88_0.05_95/25%)]"
+          />
+        </div>
+      )}
+    </StageFade>
+  );
+}
