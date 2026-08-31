@@ -9,8 +9,8 @@ export function CinematicLine({
   show,
   children,
   className = "",
-  enterDuration = 2.2,
-  exitDuration = 1.4,
+  enterDuration = 1.3,
+  exitDuration = 0.85,
 }: {
   show: boolean;
   children: ReactNode;
