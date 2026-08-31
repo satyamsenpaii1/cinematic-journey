@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { OpeningSequence } from "@/components/experience/OpeningSequence";
+import { Experience } from "@/components/experience/Experience";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -24,5 +24,5 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
-  return <OpeningSequence />;
+  return <Experience />;
 }
